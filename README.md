@@ -1,14 +1,10 @@
 # awesome-huggingface-papers-trending
 
-> 每日追踪 HuggingFace 热门论文趋势 📈
+> 自动化日报仓库
 
-## 📅 最新日报
+## 📅 最新更新
 
-- [2026年05月02日](daily/2026-05-02.md)
-
-## 📂 历史报告
-
-所有日报存储在 `daily/` 目录下。
+- [daily/2026-05-02.md](daily/2026-05-02.md)
 
 ---
 
