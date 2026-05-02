@@ -1,6 +1,6 @@
 # awesome-huggingface-papers-trending
 
-> 自动化日报仓库
+> 自动化报告仓库
 
 ## 📅 最新更新
 
