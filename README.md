@@ -8,13 +8,8 @@
 
 ## 📂 历史报告
 
-所有日报存储在 `daily/` 目录下，按日期命名。
-
-## 🔗 相关链接
-
-- [HuggingFace Papers Trending](https://huggingface.co/papers/trending)
-- [HuggingFace Daily Papers](https://huggingface.co/papers)
+所有日报存储在 `daily/` 目录下。
 
 ---
 
-*本仓库由自动化任务维护，每日更新 HuggingFace 热门论文排行。*
+*本仓库由自动化任务维护。*
