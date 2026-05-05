@@ -1,11 +1,1 @@
-# awesome-huggingface-papers-trending
-
-> 自动化报告仓库
-
-## 📅 最新更新
-
-- [daily/2026-05-05.md](daily/2026-05-05.md)
-
----
-
-*本仓库由自动化任务维护。*
+# Awesome HuggingFace Papers Trending\n\n每日收集HuggingFace热门论文趋势\n\n## 最新报告\n- [2026-05-05 日报](./huggingface_daily_report_2026-05-05.md)
