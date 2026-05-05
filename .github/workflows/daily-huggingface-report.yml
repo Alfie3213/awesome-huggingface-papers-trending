@@ -2,8 +2,8 @@ name: Daily HuggingFace Papers Trending Report
 
 on:
   schedule:
-    # 每日北京时间早上8点执行 (UTC时间0点)
-    - cron: '0 0 * * *'
+    # # 每日北京时间早上8点执行 (UTC时间0点)
+    # - cron: '0 0 * * *'
   workflow_dispatch:  # 允许手动触发
 
 jobs:
