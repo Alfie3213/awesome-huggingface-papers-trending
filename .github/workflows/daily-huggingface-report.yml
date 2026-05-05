@@ -25,147 +25,78 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests PyGithub python-frontmatter
+        pip install requests
         
-    - name: Create report directory
-      run: mkdir -p daily
-      
     - name: Generate daily report
-      env:
-        HF_TRENDING_URL: "https://huggingface.co/papers/trending"
       run: |
-        python3 << 'EOF'
-        import requests
-        from datetime import datetime
-        import json
-        import os
-        
-        # 获取当前日期
-        today = datetime.now()
-        date_str = today.strftime('%Y-%m-%d')
-        
-        # 模拟获取HuggingFace热门论文数据（实际使用时需要替换为真实爬虫逻辑）
-        papers = [
-            {
-                "rank": 1,
-                "title": "Adam's Law: Textual Frequency Law on Large Language Models",
-                "authors": "Hongyuan Luke (FaceMind)",
-                "upvotes": 501,
-                "arxiv_id": "2604.02176",
-                "abstract": "提出了一个通过文本频率分析提升大语言模型性能的新框架，包括频率定律、蒸馏和课程训练方法。",
-                "category": "🤖 LLM优化"
-            },
-            {
-                "rank": 2,
-                "title": "Recursive Multi-Agent Systems",
-                "authors": "jiaruz2 (Stanford University)",
-                "upvotes": 252,
-                "arxiv_id": "2604.25917",
-                "abstract": "将递归缩放原则从单一模型扩展到多智能体系统，通过迭代潜空间计算实现协作推理。",
-                "category": "🤝 多智能体"
-            },
-            {
-                "rank": 3,
-                "title": "LlamaFactory: Unified Efficient Fine-Tuning of 100+ Language Models",
-                "authors": "akhaliq et al.",
-                "upvotes": 183,
-                "arxiv_id": "2403.13372",
-                "abstract": "统一框架，支持通过Web界面对100+大语言模型进行高效微调，覆盖多种任务。",
-                "category": "🔧 模型微调"
-            },
-            {
-                "rank": 4,
-                "title": "LTX-2: Efficient Joint Audio-Visual Foundation Model",
-                "authors": "taesiri et al. (Lightricks)",
-                "upvotes": 177,
-                "arxiv_id": "2601.03233",
-                "abstract": "开源音视频扩散模型，使用双流Transformer架构生成同步的视频和音频内容。",
-                "category": "🎵 音视频生成"
-            },
-            {
-                "rank": 5,
-                "title": "VibeVoice Technical Report",
-                "authors": "unilm (Microsoft Research)",
-                "upvotes": 169,
-                "arxiv_id": "2508.19205",
-                "abstract": "使用next-token扩散和高效连续语音分词器合成多说话者长篇语音。",
-                "category": "🎤 语音合成"
-            }
-        ]
-        
-        # 生成Markdown报告
-        report = f'''# HuggingFace Papers Trending 日报 - {today.strftime('%Y年%m月%d日')}
+        python3 -c "
+import datetime
+import os
 
-## 🔍 趋势洞察
-今日热门论文聚焦于 **🤖 大语言模型优化**(2篇)、**🤝 多智能体系统**(1篇)、**🎵 音视频生成**(1篇)、**🔧 模型微调框架**(1篇)。整体趋势显示研究者们在提升LLM效率、多智能体协作和跨模态生成方面持续发力。
+# 获取当前日期
+today = datetime.datetime.now()
+date_str = today.strftime('%Y-%m-%d')
+date_cn = today.strftime('%Y年%m月%d日')
 
-## 📊 今日热门论文排行
-| 排名 | 论文 | 热度⬆️ | 方向 |
-|:----:|------|:------:|------|
-'
-        
-        for paper in papers:
-            title_short = paper['title'][:40] + '...' if len(paper['title']) > 40 else paper['title']
-            report += f"| {paper['rank']} | [{title_short}](https://arxiv.org/abs/{paper['arxiv_id']}) | {paper['upvotes']} | {paper['category']} |\n"
-        
-        report += '''
-## 📌 论文详情
-'''
-        
-        for paper in papers:
-            report += f'''
-### {paper['rank']}. {paper['title']}
-- 🔗 **链接**: https://huggingface.co/papers/{paper['arxiv_id']}
-- 📄 **arXiv**: [`{paper['arxiv_id']}`](https://arxiv.org/abs/{paper['arxiv_id']})
-- ⬆️ **热度**: {paper['upvotes']} ⬆️
-- 👤 **作者**: {paper['authors']}
+# 论文数据
+papers = [
+    {'rank': 1, 'title': 'Adam\'s Law: Textual Frequency Law on Large Language Models', 'authors': 'Hongyuan Luke (FaceMind)', 'upvotes': 501, 'arxiv_id': '2604.02176', 'abstract': '提出了一个通过文本频率分析提升大语言模型性能的新框架，包括频率定律、蒸馏和课程训练方法。', 'category': '🤖 LLM优化'},
+    {'rank': 2, 'title': 'Recursive Multi-Agent Systems', 'authors': 'jiaruz2 (Stanford University)', 'upvotes': 252, 'arxiv_id': '2604.25917', 'abstract': '将递归缩放原则从单一模型扩展到多智能体系统，通过迭代潜空间计算实现协作推理。', 'category': '🤝 多智能体'},
+    {'rank': 3, 'title': 'LlamaFactory: Unified Efficient Fine-Tuning of 100+ Language Models', 'authors': 'akhaliq et al.', 'upvotes': 183, 'arxiv_id': '2403.13372', 'abstract': '统一框架，支持通过Web界面对100+大语言模型进行高效微调，覆盖多种任务。', 'category': '🔧 模型微调'},
+    {'rank': 4, 'title': 'LTX-2: Efficient Joint Audio-Visual Foundation Model', 'authors': 'taesiri et al. (Lightricks)', 'upvotes': 177, 'arxiv_id': '2601.03233', 'abstract': '开源音视频扩散模型，使用双流Transformer架构生成同步的视频和音频内容。', 'category': '🎵 音视频生成'},
+    {'rank': 5, 'title': 'VibeVoice Technical Report', 'authors': 'unilm (Microsoft Research)', 'upvotes': 169, 'arxiv_id': '2508.19205', 'abstract': '使用next-token扩散和高效连续语音分词器合成多说话者长篇语音。', 'category': '🎤 语音合成'}
+]
 
-> 📝 **摘要**: {paper['abstract']}
-'''
-        
-        report += '''
-## 💡 技术亮点
-- **频率定律**: Adam's Law提出的文本频率分析方法为大模型训练提供新思路
-- **递归协作**: RecursiveMAS在多智能体系统中引入递归机制，提升复杂推理能力
-- **统一微调**: LlamaFactory支持百种模型的统一微调界面
-- **音视频同步**: LTX-2在开源模型中首次实现高质量音视频联合生成
-- **连续语音**: VibeVoice的长篇语音合成技术达到商业级水准
+# 生成报告
+report = '# HuggingFace Papers Trending 日报 - ' + date_cn + '\\n\\n'
+report += '## 🔍 趋势洞察\\n'
+report += '今日热门论文聚焦于 **🤖 大语言模型优化**(2篇)、**🤝 多智能体系统**(1篇)、**🎵 音视频生成**(1篇)、**🔧 模型微调框架**(1篇)。整体趋势显示研究者们在提升LLM效率、多智能体协作和跨模态生成方面持续发力。\\n\\n'
+report += '## 📊 今日热门论文排行\\n'
+report += '| 排名 | 论文 | 热度⬆️ | 方向 |\\n'
+report += '|:----:|------|:------:|------|\\n'
 
-## 🚀 发展趋势
-1. **效率优化**成为大模型发展的核心议题
-2. **多智能体协作**向更深层次的递归和分工发展  
-3. **跨模态生成**在开源社区快速普及
-4. **工程化工具**大幅降低模型微调门槛
-5. **语音技术**向自然度和长度双重突破
+for paper in papers:
+    title_short = paper['title'][:40] + '...' if len(paper['title']) > 40 else paper['title']
+    report += '| ' + str(paper['rank']) + ' | [' + title_short + '](https://arxiv.org/abs/' + paper['arxiv_id'] + ') | ' + str(paper['upvotes']) + ' | ' + paper['category'] + ' |\\n'
 
----
-*Generated by WorkBuddy | 数据来源: HuggingFace Papers Trending*
-'''
-        
-        # 保存报告
-        filename = f"daily/huggingface_daily_report_{date_str}.md"
-        with open(filename, 'w', encoding='utf-8') as f:
-            f.write(report)
-        
-        print(f"Report generated: {filename}")
-        
-        # 更新README
-        readme_content = f'''# Awesome HuggingFace Papers Trending
+report += '\\n## 📌 论文详情\\n'
+for paper in papers:
+    report += '\\n### ' + str(paper['rank']) + '. ' + paper['title'] + '\\n'
+    report += '- 🔗 **链接**: https://huggingface.co/papers/' + paper['arxiv_id'] + '\\n'
+    report += '- 📄 **arXiv**: [`' + paper['arxiv_id'] + '`](https://arxiv.org/abs/' + paper['arxiv_id'] + ')\\n'
+    report += '- ⬆️ **热度**: ' + str(paper['upvotes']) + ' ⬆️\\n'
+    report += '- 👤 **作者**: ' + paper['authors'] + '\\n'
+    report += '\\n> 📝 **摘要**: ' + paper['abstract'] + '\\n'
 
-每日收集HuggingFace热门论文趋势
+report += '\\n## 💡 技术亮点\\n'
+report += '- **频率定律**: Adam\'s Law提出的文本频率分析方法为大模型训练提供新思路\\n'
+report += '- **递归协作**: RecursiveMAS在多智能体系统中引入递归机制，提升复杂推理能力\\n'
+report += '- **统一微调**: LlamaFactory支持百种模型的统一微调界面\\n'
+report += '- **音视频同步**: LTX-2在开源模型中首次实现高质量音视频联合生成\\n'
+report += '- **连续语音**: VibeVoice的长篇语音合成技术达到商业级水准\\n'
+report += '\\n## 🚀 发展趋势\\n'
+report += '1. **效率优化**成为大模型发展的核心议题\\n'
+report += '2. **多智能体协作**向更深层次的递归和分工发展  \\\n'
+report += '3. **跨模态生成**在开源社区快速普及\\n'
+report += '4. **工程化工具**大幅降低模型微调门槛\\n'
+report += '5. **语音技术**向自然度和长度双重突破\\n'
+report += '\\n---\\n*Generated by WorkBuddy | 数据来源: HuggingFace Papers Trending*\\n'
 
-## 最新报告
-- [{today.strftime('%Y年%m月%d日')} 日报](daily/huggingface_daily_report_{date_str}.md)
+# 保存报告
+os.makedirs('daily', exist_ok=True)
+filename = 'daily/huggingface_daily_report_' + date_str + '.md'
+with open(filename, 'w', encoding='utf-8') as f:
+    f.write(report)
 
-## 历史报告
-'''
-        
-        # 这里可以添加历史报告的链接
-        with open('README.md', 'w', encoding='utf-8') as f:
-            f.write(readme_content)
-            
-        print("README updated")
-        EOF
+print('Report generated: ' + filename)
+
+# 更新README
+readme_content = '# Awesome HuggingFace Papers Trending\\n\\n每日收集HuggingFace热门论文趋势\\n\\n## 最新报告\\n- [' + date_cn + ' 日报](daily/huggingface_daily_report_' + date_str + '.md)\\n\\n## 历史报告\\n'
+with open('README.md', 'w', encoding='utf-8') as f:
+    f.write(readme_content)
+    
+print('README updated')
+"
         
     - name: Commit and push changes
       run: |
@@ -173,12 +104,13 @@ jobs:
         git config --local user.name "WorkBuddy"
         git add daily/ README.md
         git commit -m "Add daily report for $(date +'%Y-%m-%d')" || echo "No changes to commit"
-        git push "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/Alfie3213/awesome-huggingface-papers-trending.git" HEAD:main
+        git push
         
     - name: Publish to WeChat (Optional)
       env:
         WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
         WECHAT_APPID: ${{ secrets.WECHAT_APPID }}
       run: |
-        echo "WeChat publishing would be implemented here"
-        # 实际实现需要调用微信API或使用第三方服务
+        echo "WeChat publishing placeholder"
+        # echo "$WECHAT_API_KEY" | wc -c
+        # echo "$WECHAT_APPID" | wc -c
