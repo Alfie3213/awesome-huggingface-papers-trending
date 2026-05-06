@@ -1,10 +1,11 @@
-# Awesome HuggingFace Papers Trending
+# awesome-huggingface-papers-trending
 
-每日收集 HuggingFace 热门论文趋势，自动生成结构化日报。
+> 自动化报告仓库
 
-## 最新报告
-- [2026年05月05日 日报](daily/huggingface_daily_report_2026-05-05.md)
+## 📅 最新更新
 
-## 历史报告
+- [daily/2026-05-06.md](daily/2026-05-06.md)
 
-- [2026-05-05 日报](daily/huggingface_daily_report_2026-05-05.md)
+---
+
+*本仓库由自动化任务维护。*
